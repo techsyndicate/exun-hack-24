@@ -12,32 +12,49 @@ router.get('/', async (req,res) => {
 })
 
 router.post('/uploadAvatar', async (req,res) => {
-    const {base64Image} = req.body
+    const {base64Image} = req.body;
     const url = 'https://api.imgur.com/3/image';
     const formData = new FormData();
     formData.append('image', base64Image);      
+    
     const options = {
-            method: 'POST',
-            headers: {
-                Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
-            },
-            body: formData
+        method: 'POST',
+        headers: {
+            'Authorization': `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+            'Content-Type': 'multipart/form-data'
+        },
+        body: formData
     };
+
     try {
         await new Promise(resolve => setTimeout(resolve, 1000));
         const response = await fetch(url, options);
-        const result = await response.json();
-        console.log(result)
-        const data = result.data;
-
-        await User.findOneAndUpdate({_id:req.user._id}, {$set: {avatar:data.link}})
         
+        const rawResponse = await response.text();
+        console.log('Raw response:', rawResponse);
+
+        if (!response.ok) {
+            throw new Error(`Error aa gaya: ${response.status}`);
+        }
+
+        const result = JSON.parse(rawResponse);
+        console.log('parsed result', result);
+
+        if (result.data && result.data.link) {
+            await User.findOneAndUpdate(
+                {_id: req.user._id}, 
+                {$set: {avatar: result.data.link}}
+            );
+        } else {
+            throw new Error('Imgur marr gya');
+        }
+
+        res.redirect('/discoveries');
     } catch (error) {
         console.error('Error uploading image:', error);
+        res.status(500).json({ error: error.message });
     }
-    res.redirect('/discoveries')
-})
-
+});
 
 router.post('/addDiscovery', async (req,res) => {
     const {title, description, important} = req.body
