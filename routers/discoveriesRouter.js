@@ -24,6 +24,7 @@ router.post('/uploadAvatar', async (req,res) => {
             body: formData
     };
     try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         const response = await fetch(url, options);
         const result = await response.json();
         console.log(result)
