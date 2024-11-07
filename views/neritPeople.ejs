@@ -6,7 +6,7 @@
     <% for( let i = 0; i < users.length; i++ ) { %>
         <div class="object w-1/5">
             <div class="bg-periwinkle p-6 rounded-xl flex flex-col justify-center items-center">
-                <% if (users.avatar) { %>
+                <% if (users[i].avatar) { %>
                     <img
                         onclick="showModal()"
                         src="<%= users[i].avatar %>"
