@@ -3,6 +3,7 @@ const User = require('../schemas/userSchema')
 const Discovery = require('../schemas/discoverySchema')
 const FormData = require('form-data');
 const fetch = require('node-fetch')
+const ImageKit = require("imagekit");
 
 const router = require('express').Router()
 
@@ -12,44 +13,30 @@ router.get('/', async (req,res) => {
 })
 
 router.post('/uploadAvatar', async (req,res) => {
+    const imagekit = new ImageKit({
+        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+        privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
+    });    
     const {base64Image} = req.body;
-    const url = 'https://api.imgur.com/3/image';
-    const formData = new FormData();
-    formData.append('image', base64Image);      
-    
-    const options = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
-            'Content-Type': 'multipart/form-data'
-        },
-        body: formData
-    };
-
     try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const response = await fetch(url, options);
-        
-        const rawResponse = await response.text();
-        console.log('Raw response:', rawResponse);
+        // Upload to ImageKit
+        const upload = await imagekit.upload({
+            file: base64Image,
+            fileName: `avatar-${Date.now()}.jpg`,
+            folder: "/avatars"
+        });
 
-        if (!response.ok) {
-            throw new Error(`Error aa gaya: ${response.status}`);
-        }
-
-        const result = JSON.parse(rawResponse);
-        console.log('parsed result', result);
-
-        if (result.data && result.data.link) {
+        if (upload.url) {
             await User.findOneAndUpdate(
-                {_id: req.user._id}, 
-                {$set: {avatar: result.data.link}}
+                { _id: req.user._id },
+                { $set: { avatar: upload.url } }
             );
+            res.redirect('/discoveries');
         } else {
-            throw new Error('Imgur marr gya');
+            throw new Error('Upload failed');
         }
 
-        res.redirect('/discoveries');
     } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).json({ error: error.message });
