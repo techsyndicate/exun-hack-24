@@ -144,13 +144,18 @@ router.get('/success', async (req, res) => {
 })
 
 router.get("/profile/:id", async(req,res) => {
-    console.log(req.params.id)
-    const userWallet = await Wallet.find({mongooseId:req.params.id})
-    console.log(userWallet)
-    const user = await Users.find({_id:req.params.id})
-    const transactions = await Auction.find({highestBidder: req.user.email})
-    
-    res.render('neritProfile', {userWallet:userWallet[0], user:user[0], transactions})
+    try {
+        console.log(req.params.id)
+        const userWallet = await Wallet.findOne({mongooseId:req.params.id})
+        console.log(userWallet)
+        const user = await Users.findById(req.params.id)
+        const transactions = await Auction.find({highestBidder: user.email})
+        console.log(transactions)
+        res.render('neritProfile', {userWallet:userWallet, user:user, transactions})      
+    } catch (error) {
+        console.log(error)
+        res.send('something went wrong')
+    }
 })
 
 router.get('/people', async (req, res) => {

@@ -102,14 +102,14 @@
         onclick="showModal()"
         src="<%= user.avatar %>"
         alt="Profile"
-        class="w-[7vw] aspect-square rounded-full mt-[8vh] border border-accent-dark"
+        class="w-[7vw] h-[7vw] object-cover rounded-full mt-[8vh] border border-accent-dark"
       />
       <% } else { %>
       <img
         onclick="showModal()"
         src="/avatar.png"
         alt="Profile"
-        class="w-[7vw] aspect-square rounded-full mt-[8vh] border border-accent-dark"
+        class="w-[7vw] h-[7vw] object-cover rounded-full mt-[8vh] border border-accent-dark"
       />
       <% } %>
       <p class="text-[1.5vh] mt-[0.5vh]">(CLICK TO EDIT)</p>
@@ -134,7 +134,7 @@
           <div class="flex flex-row items-center w-fit gap-[1vw]">
             <img
               src="<%= discoveries[i].avatar %>"
-              class="w-[3.5vw] aspect-square rounded-full border border-accent-dark"
+              class="w-[3.5vw] h-[3.5vw] object-cover rounded-full border border-accent-dark"
               alt=""
             />
             <div class="">

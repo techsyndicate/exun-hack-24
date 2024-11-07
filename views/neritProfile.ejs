@@ -1,8 +1,8 @@
 <%- layout('layout') %>
 
-<h1 class="text-center text-5xl font-extrabold mt-[4vh] mb-[4vh]" >Profile</h1>
+<h1 class="text-center text-5xl font-extrabold mt-[6vh] mb-[6vh]" >Profile</h1>
 
-<div class="flex flex-row w-[100%] justify-center items-center gap-[10%]">
+<div class="flex flex-row w-[100%] justify-center items-center gap-[2.5vw]">
     <div class="flex flex-col w-[40%] h-[80vh] p-9 rounded-3xl bg-periwinkle mb-[5vh]">
         <div class="flex flex-row items-center justify-between">
             <h1 class="text-4xl font-extrabold text-accent-dark">User Info</h1>
@@ -12,23 +12,21 @@
                 <div class="flex flex-col justify-between w-[100%] items-center p-4 rounded-3xl">
                     <% if (user.avatar) { %>
                     <img
-                        onclick="showModal()"
                         src="<%= user.avatar %>"
                         alt="Profile"
-                        class="w-[15vw] aspect-square rounded-full mt-[8vh] border border-accent-dark"
+                        class="h-[20vh] w-[20vh] mb-[2vh] object-cover rounded-full border border-accent-dark"
                     />
                     <% } else { %>
                     <img
-                        onclick="showModal()"
                         src="/avatar.png"
                         alt="Profile"
-                        class="w-[15vw] aspect-square rounded-full mt-[8vh] border border-accent-dark"
+                        class="h-[20vh] w-[20vh] mb-[2vh] object-cover rounded-full border border-accent-dark"
                     />
                     <% } %>
-                    <p class="text-3xl mt-[3vh] text-accent-dark">Name : <%= user.fname + ' ' + user.lname %></p>
-                    <p class="text-3xl mt-[3vh] text-accent-dark">Email : <%= user.email %></p>
-                    <p class="text-3xl mt-[3vh] text-accent-dark">Role : <%= user.role %></p>
-                    <button onclick="copyPublicKey()" class="ml-2 px-2 py-1 text-lg mt-[3vh] text-white bg-indigo-400 rounded">Copy Public Key of user</button>
+                    <p class="text-[3.5vh] mt-[3vh] text-accent-dark">Name : <%= user.fname + ' ' + user.lname %></p>
+                    <p class="text-[3.5vh] mt-[3vh] text-accent-dark">Email : <%= user.email %></p>
+                    <p class="text-[3.5vh] mt-[3vh] text-accent-dark">Role : <%= user.role %></p>
+                    <button onclick="copyPublicKey()" class="ml-2 p-4 text-lg mt-[3vh] text-white bg-accent-dark rounded-lg leading-4">Copy Public Key of user</button>
                 </div>
             </div>
         </div>
