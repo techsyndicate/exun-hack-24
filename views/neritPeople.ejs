@@ -1,0 +1,31 @@
+<%- layout('layout') %>
+
+<h1 class="text-center text-6xl font-extrabold mt-[4vh] mb-[4vh]">Users</h1>
+
+<div class="objects w-[100%] flex flex-row flex-wrap justify-center items-center gap-[4vw] mr-[10%]">    
+    <% for( let i = 0; i < users.length; i++ ) { %>
+        <div class="object w-1/5">
+            <div class="bg-periwinkle p-6 rounded-xl flex flex-col justify-center items-center">
+                <% if (users.avatar) { %>
+                    <img
+                        onclick="showModal()"
+                        src="<%= users[i].avatar %>"
+                        alt="Profile"
+                        class="h-[20vh] aspect-square object-cover mb-6"
+                    />
+                    <% } else { %>
+                    <img
+                        onclick="showModal()"
+                        src="/avatar.png"
+                        alt="Profile"
+                        class="h-[20vh] aspect-square object-cover mb-6"
+                    />
+                    <% } %>
+                <h2 class="text-3xl text-primary font-bold mb-1"><%= users[i].fname + ' ' + users[i].lname%></h2>
+                <p class="text-primary text-xl">Base Price : η&nbsp;<%= users[i].role%></p>
+                <button type="button" class="bg-accent-light p-[1vw] w-[100%] mt-[2vh] text-2xl" onclick="window.location.href='/nerit/profile/<%= users[i]._id%>'">View Profile</button>
+            </div>
+        </div>
+    <% } %>
+
+</div>

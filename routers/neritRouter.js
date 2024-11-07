@@ -153,4 +153,15 @@ router.get("/profile/:id", async(req,res) => {
     res.render('neritProfile', {userWallet:userWallet[0], user:user[0], transactions})
 })
 
+router.get('/people', async (req, res) => {
+    const userWallets = await Wallet.find()
+    const users = []
+    for (let i = 0; i < userWallets.length; i++) {
+        const user = await Users.find({_id: userWallets[i].mongooseId})
+        users.push(user[0])
+        console.log(user)
+    }
+    res.render('neritPeople', {users})
+})
+
 module.exports = router
