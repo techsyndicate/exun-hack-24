@@ -49,43 +49,42 @@ router.post('/addDiscovery', async (req,res) => {
         urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
     });
     const {title, description, important, imagekimkc} = req.body
-    // let uploadLink = ''
-    console.log(req.body)
+    let imageUrl = '';
     if (imagekimkc) {
-        console.log('this is imagekimkc')
         try {
             const upload = await imagekit.upload({
                 file: imagekimkc,
-                fileName: `avatar-${Date.now()}.jpg`,
+                fileName: `discovery-${Date.now()}.jpg`,
                 folder: "/discoveries"
             });
             if (upload.url) {
                 console.log('this is upload url', upload.url)
-                let avatar = req.user.avatar
-                if (!req.user.avatar) {
-                    avatar = '/avatar.png'
-                }
-                const newDiscovery = new Discovery({
-                    userId: req.user.id,
-                    title,
-                    description,
-                    important: important == "true",
-                    author: req.user.fname + ' ' + req.user.lname,
-                    role: req.user.role,
-                    avatar: avatar,
-                    image: upload.link
-                })
-                await newDiscovery.save()
-                res.send('hll')
+                imageUrl = upload.url
             } else {
-                res.send('oh no')
+                res.send('marr gya')
             }
-    
+            
         } catch (error) {
             console.error('Error uploading image:', error);
             res.status(500).json({ error: error.message });
         }
     }
+    let avatar = req.user.avatar
+    if (!req.user.avatar) {
+        avatar = '/avatar.png'
+    }
+    const newDiscovery = new Discovery({
+        userId: req.user.id,
+        title: title,
+        description: description,
+        important: important == "true",
+        author: req.user.fname + ' ' + req.user.lname,
+        role: req.user.role,
+        avatar: avatar,
+        image: imageUrl
+    })
+    await newDiscovery.save()
+    res.redirect(`/discoveries/${newDiscovery._id}`)
 })
 
 router.get('/:id', async (req,res) => {

@@ -27,9 +27,11 @@
             <% }%>
         </div>
     </div>
-    <div class="p-[4vw]">
+    <div class="p-[4vw] w-[76vw] relative">
+        <% if (discovery.image) { %>
+            <img src="<%= discovery.image %>" alt="" class="h-[20vh] object-cover rounded-lg absolute top-[4vw] right-0">
+        <% } %>
         <div class="mt-[2vw]">
-            <img src="<%= discovery.image %>" alt="">
             <h1 class="text-3xl font-semibold text-accent-dark"><%= discovery.title %></h1>
             <p class="mt-5 w-[90%]"><%= discovery.description %></p>
         </div>
