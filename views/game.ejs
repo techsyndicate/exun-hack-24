@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nereia</title>
+    <link rel="shortcut icon" href="/fav.svg" type="image/x-icon">
+    <link href="/output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #11005e;
+        border-radius: 5px;
+      }
+      body {
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .gameContainer {
+        width: 70vw;
+        height: 35vw;
+        position: relative;
+      }
+      .robotAsset {
+        width: 3vw;
+        height: 9vw;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: 1vh;
+        right: 1vw;
+      }
+      .sar {
+        background: #5d5555;
+        height: 2.5vw;
+        display: flex;
+        align-items: column;
+        width: 2.5vw;
+        align-self: flex-end;
+      }
+      .aankh {
+        margin-top: 0.5vw;
+        height: 1vw;
+        background-color: #000;
+        width: 1.5vw;
+        border-top-right-radius: 100vw;
+        border-bottom-right-radius: 100vw;
+      }
+      .gardan {
+        height: 0.5vw;
+        background-color: #111;
+        width: 2.5vw;
+        align-self: flex-end;
+      }
+      .shareer {
+        height: 3vw;
+        background-color: #5d5555;
+        display: flex;
+        clip-path: polygon(16.66% 0, 100% 0, 100% 100%, 0% 100%);
+      }
+      .topi {
+        height: 1vw;
+        background-color: navy;
+        border-top-left-radius: 100vw;
+        border-top-right-radius: 100vw;
+        width: 2.5vw;
+        align-self: flex-end;
+      }
+      .taangein {
+        display: flex;
+        align-items: flex-start;
+      }
+      .leftTaang {
+        background-color: navy;
+        width: 1vw;
+        height: 2vw;
+      }
+      .rightTaang {
+        background-color: #000;
+        width: 2vw;
+        height: 2vw;
+      }
+      .nereium {
+        background-color: rgb(100, 19, 154);
+        width: 3vw;
+        height: 3vw;
+        position: absolute;
+        clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      }
+      .junk {
+        width: 3vw;
+        height: 3vw;
+        position: absolute;
+        transition: 2.5s;
+      }
+      .endGame {
+        width: 70vw;
+        height: 35vw;
+        background-color: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        color: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: none;
+      }
+      button {
+        border: 1px solid white;
+        border-radius: 100vw;
+        color: white;
+        padding: 0.85vw 2vw;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      button:hover {
+        color: black;
+        background-color: white;
+        font-weight: bold;
+      }
+    </style>
+    <script
+      defer
+      src="https://kit.fontawesome.com/0f20a2b955.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="bg-[#000838] font-raleway text-primary">
+    <h1 style="color: white; font-size: 2vw; margin-bottom: 0.5vw;">Nereium Collected: <span id="score">0</span>mg</h1>
+    <div class="gameContainer bg-accent-light" id="container">
+        <div class="endGame" id="endGame">
+            <button onclick="window.location.reload()">Start Over</button>
+        </div>
+        <div class="robotAsset" id="ybot" style="bottom: 1vw; right: 1vw;">
+            <div class="topi"></div>
+            <div class="sar">
+                <div class="aankh"></div>
+            </div>
+            <div class="gardan"></div>
+            <div class="shareer">
+                <div class="baaju">
+                    <div class="forearm"></div>
+                    <div class="haath"></div>
+                </div>
+            </div>
+            <div class="taangein">
+                <div class="leftTaang"></div>
+                <div class="rightTaang"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var score = 0
+        const ybot = document.getElementById('ybot')
+        var ybotRight = Number(ybot.style.right.replaceAll('vw', ''))
+        var ybotBottom = Number(ybot.style.bottom.replaceAll('vw', ''))
+        const pressedKeys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowRight: false,
+            ArrowLeft: false
+        }
+        const allIntervals = []
+        var nereium;
+        window.addEventListener('keydown', (e) => {
+            if (pressedKeys[e.code]) return
+            pressedKeys[e.code] = true
+        })
+        window.addEventListener('keyup', (e) => {
+            if (!pressedKeys[e.code]) return
+            pressedKeys[e.code] = false
+        })
+        window.onload = () => {
+            makeNewNereium()
+            var myInterval = setInterval(() => {
+                if (checkIfColliding(nereium.getBoundingClientRect(), ybot.getBoundingClientRect())) {
+                    score += 10
+                    document.getElementById('score').innerText = score.toString()
+                    makeNewNereium()
+                }    
+                if (pressedKeys.ArrowDown && ybotBottom >= 0) {
+                    ybotBottom -= 0.1
+                    ybot.style.bottom = `${ybotBottom}vw`
+                }
+                if (pressedKeys.ArrowUp && ybotBottom <= 26) {
+                    ybotBottom += 0.1
+                    ybot.style.bottom = `${ybotBottom}vw`
+                }
+                if (pressedKeys.ArrowRight && ybotRight >= 0) {
+                    ybotRight -= 0.1
+                    ybot.style.right = `${ybotRight}vw`
+                    ybot.style.transform = 'scaleX(-1)'
+                }
+                if (pressedKeys.ArrowLeft && ybotRight <= 67) {
+                    ybotRight += 0.1
+                    ybot.style.right = `${ybotRight}vw`
+                    ybot.style.transform = 'scaleX(1)'
+                }
+            }, 5)
+            var myInterval2 = setInterval(makeNewJunk, 5000)
+            allIntervals.push(myInterval)
+            allIntervals.push(myInterval2)
+        }
+        function checkIfColliding(rect1, rect2) {
+            var overlap = !(rect1.right < rect2.left || 
+                rect1.left > rect2.right || 
+                rect1.bottom < rect2.top || 
+                rect1.top > rect2.bottom)
+            return overlap
+        }
+        function makeNewNereium() {
+            if (nereium) nereium.remove()
+            const newNereium = document.createElement('div')
+            newNereium.className = 'nereium'
+            newNereium.style.bottom = Math.floor(Math.random() * 32) + 'vw'
+            newNereium.style.right = Math.floor(Math.random() * 67) + 'vw'
+            document.getElementById('container').appendChild(newNereium)
+            nereium = newNereium
+        }
+        function makeNewJunk() {
+            const newJunk = document.createElement('img')
+            const randomRotation = Math.floor(Math.random() * 360)
+            newJunk.className = 'junk'
+            newJunk.style.transform = `rotate(${randomRotation}deg)`
+            newJunk.src = '/kachra.png'
+            document.getElementById('container').appendChild(newJunk)
+            newJunk.style.bottom = Math.floor(Math.random() * 32) + 'vw'
+            newJunk.style.right = Math.floor(Math.random() * 67) + 'vw'
+            var myInterval3 = setInterval(() => {
+                newJunk.style.bottom = Math.floor(Math.random() * 32) + 'vw'
+                newJunk.style.right = Math.floor(Math.random() * 67) + 'vw'
+            }, 1500)
+            var myInterval4 = setInterval(() => {
+                if (checkIfColliding(newJunk.getBoundingClientRect(), ybot.getBoundingClientRect())) {
+                    stopGame()
+                }
+            }, 10)
+            allIntervals.push(myInterval3)
+            allIntervals.push(myInterval4)
+        }
+        function stopGame() {
+            document.getElementById('endGame').style.display = 'flex'
+            for (let i = 0; i < allIntervals.length; i++) {
+                clearInterval(allIntervals[i])
+            }
+        }
+    </script>
+  </body>
+</html>

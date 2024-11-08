@@ -77,6 +77,9 @@ app.use("/join", ensureAuthenticated, joinRouter);
 app.use("/nerit", ensureAuthenticated, neritRouter);
 app.use("/shop", ensureAuthenticated, ensureRole, shopRouter);
 app.use("/sos", ensureAuthenticated, sosRouter);
+app.get('/game', (req, res) => {
+  res.render('game')
+})
 
 app.get("/logout", (req, res) => {
   req.logout((err) => {
