@@ -8,6 +8,11 @@ const discoverySchema = mongoose.Schema({
     author: reqString,
     role: reqString,
     avatar: reqString,
+    image: {
+        type: String,
+        default: '',
+        required: false
+    },
     createdAt: { type: Date, default: Date.now },
     important: { type: Boolean, default: false }
 })
