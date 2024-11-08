@@ -11,16 +11,26 @@
     </div>
     <div id="chat-list">
       <% allUsers.forEach(chatUser => { %>
-        <% if (chatUser.id != user.id) { %>
+        <% if (chatUser.id != user.id && unreadUsers.includes(chatUser.id)) { %>
          
           <div class="p-5 hover:bg-periwinkle hover:cursor-pointer flex flex-row items-center gap-5 border-b-2 border-periwinkle" onclick="location.href=location.href.split('chat')[0]+'chat/<%=chatUser.id %>'">
             
             <img src="<%= chatUser.avatar == '' ? '/pfp.svg' : chatUser.avatar %>" alt="" class="w-10 h-10 rounded-[50%]">
-            <% if (unreadUsers.includes(chatUser.id)) { %>
-              <h1 className="font-bold"><%= chatUser.fname + ' ' + chatUser.lname %></h1>
-            <% } else { %>
+            <% if (chatUser.id == theUserId) { %>
               <h1><%= chatUser.fname + ' ' + chatUser.lname %></h1>
+            <% } else { %>
+              <h1 class="font-bold"><%= chatUser.fname + ' ' + chatUser.lname %></h1>
             <% } %>
+          </div>
+          <% } %>
+      <% }) %>
+      <% allUsers.forEach(chatUser => { %>
+        <% if (chatUser.id != user.id && !unreadUsers.includes(chatUser.id)) { %>
+         
+          <div class="p-5 hover:bg-periwinkle hover:cursor-pointer flex flex-row items-center gap-5 border-b-2 border-periwinkle" onclick="location.href=location.href.split('chat')[0]+'chat/<%=chatUser.id %>'">
+            
+            <img src="<%= chatUser.avatar == '' ? '/pfp.svg' : chatUser.avatar %>" alt="" class="w-10 h-10 rounded-[50%]">
+              <h1><%= chatUser.fname + ' ' + chatUser.lname %></h1>
           </div>
           <% } %>
       <% }) %>
@@ -108,9 +118,7 @@
                   </div>
                     
                   </div>
-
-
-<% block('js', `
+                  <script src="/socket.io/socket.io.js"></script>
 <script>
     
   function scrollToBottom() {
@@ -140,4 +148,3 @@
     });
 
     </script>
-    `) %>

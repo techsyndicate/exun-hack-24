@@ -10,8 +10,9 @@ router.get('/', async (req,res) => {
     const allUsers = await User.find({})
     const unreadUsers = []
     const allMessages = await Messages.find()
+    console.log(unreadUsers)
     for (let i = 0; i < allMessages.length; i++) {
-        if (!allMessages[i].read && allMessages[i].from != user.id && !unreadUsers.includes(allMessages[i].from)) {
+        if (!allMessages[i].read && allMessages[i].from != user.id && allMessages[i].to == user.id && !unreadUsers.includes(allMessages[i].from)) {
             unreadUsers.push(allMessages[i].from)
         }
     }
@@ -25,7 +26,7 @@ router.get('/:id', async (req,res) => {
         const unreadUsers = []
         const allMessages = await Messages.find()
         for (let i = 0; i < allMessages.length; i++) {
-            if (!allMessages[i].read && allMessages[i].from != user.id && !unreadUsers.includes(allMessages[i].from)) {
+            if (!allMessages[i].read && allMessages[i].from != user.id && allMessages[i].to == user.id && !unreadUsers.includes(allMessages[i].from)) {
                 unreadUsers.push(allMessages[i].from)
             }
         }
@@ -41,7 +42,7 @@ router.get('/:id', async (req,res) => {
             })
         }
         messages.sort((a, b) => a.timestamp - b.timestamp);
-        res.render('chat', {title:'welcome', user:user, receiver, messages, allUsers, unreadUsers})
+        res.render('chat', {title:'welcome', user:user, receiver, messages, allUsers, unreadUsers, theUserId: req.params.id})
     } catch (error) {
         console.log(error)
         res.send('something went wrong. please try again.')

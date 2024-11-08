@@ -20,10 +20,6 @@ const express = require("express"),
   MongoStore = require('connect-mongo'),
   app = express();
   
-  
-  const server = http.createServer(app);
-  const io = socketIo(server);
-  
   const indexRouter = require("./routers/indexRouter"),
   loginRouter = require("./routers/loginRouter"),
   registerRouter = require("./routers/registerRouter"),
@@ -89,6 +85,9 @@ app.get("/logout", (req, res) => {
   });
 });
 
+const myServer = app.listen(PORT, console.log(`Server listening on port ${PORT}`));
+const io = new socketIo.Server(myServer)
+
 io.on("connection", (socket) => {
   console.log("New client connected");
 
@@ -102,5 +101,3 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 });
-
-app.listen(PORT, console.log(`Server listening on port ${PORT}`));
