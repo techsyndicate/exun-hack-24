@@ -43,24 +43,49 @@ router.post('/uploadAvatar', async (req,res) => {
 });
 
 router.post('/addDiscovery', async (req,res) => {
-    const {title, description, important} = req.body
-    console.log(important)
-    console.log(req.user)
-    let avatar = req.user.avatar
-    if (!req.user.avatar) {
-        avatar = '/avatar.png'
+    const imagekit = new ImageKit({
+        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+        privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
+    });
+    const {title, description, important, imagekimkc} = req.body
+    // let uploadLink = ''
+    console.log(req.body)
+    if (imagekimkc) {
+        console.log('this is imagekimkc')
+        try {
+            const upload = await imagekit.upload({
+                file: imagekimkc,
+                fileName: `avatar-${Date.now()}.jpg`,
+                folder: "/discoveries"
+            });
+            if (upload.url) {
+                console.log('this is upload url', upload.url)
+                let avatar = req.user.avatar
+                if (!req.user.avatar) {
+                    avatar = '/avatar.png'
+                }
+                const newDiscovery = new Discovery({
+                    userId: req.user.id,
+                    title,
+                    description,
+                    important: important == "true",
+                    author: req.user.fname + ' ' + req.user.lname,
+                    role: req.user.role,
+                    avatar: avatar,
+                    image: upload.link
+                })
+                await newDiscovery.save()
+                res.send('hll')
+            } else {
+                res.send('oh no')
+            }
+    
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            res.status(500).json({ error: error.message });
+        }
     }
-    const newDiscovery = new Discovery({
-        userId: req.user._id,
-        title,
-        description,
-        important: important == "true",
-        author: req.user.fname + ' ' + req.user.lname,
-        role: req.user.role,
-        avatar: avatar
-    })
-    await newDiscovery.save()
-    res.redirect('/discoveries')
 })
 
 router.get('/:id', async (req,res) => {
