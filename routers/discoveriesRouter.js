@@ -20,7 +20,6 @@ router.post('/uploadAvatar', async (req,res) => {
     });    
     const {base64Image} = req.body;
     try {
-        // Upload to ImageKit
         const upload = await imagekit.upload({
             file: base64Image,
             fileName: `avatar-${Date.now()}.jpg`,
