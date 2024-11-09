@@ -273,15 +273,19 @@
     const file = document.getElementById("img").files[0];
     const reader = new FileReader();
     reader.onloadend = function () {
+      console.log(reader)
       const base64String = reader.result
-        .replace("data:", "")
-        .replace(/^.+,/, "");
+      .replace("data:", "")
+      .replace(/^.+,/, "");
+      console.log(base64String)
       document.getElementById("base64Image").value = base64String;
       document.getElementById("preview").src = reader.result;
       document.getElementById("preview").style.display = "block";
       document.getElementById("btn").style.display = "flex";
       document.querySelector("label i").style.display = "none";
     };
+    reader.readAsDataURL(file);
+
   }
   async function previewImage2() {
     try {
