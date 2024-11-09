@@ -87,6 +87,10 @@ router.post('/addDiscovery', async (req,res) => {
     res.redirect(`/discoveries/${newDiscovery._id}`)
 })
 
+router.get('/map', (req, res) => {
+    res.render('map')
+})
+
 router.get('/:id', async (req,res) => {
     try {
         const discovery = await Discovery.findOne({_id:req.params.id})
