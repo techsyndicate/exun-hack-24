@@ -19,7 +19,7 @@
         <p class="w-[40vw] text-center text-sm text-[rgba(0,0,0,0.5)]">Your SOS request has been sent. Please wait for the SOS team to reach out to you.</p>
         <div class="w-[30vw] mt-[5vh] flex flex-row items-center justify-between">
             <p class="font-bold text-lg">Created At: </p>
-            <p class="text-lg"><%= new Date(sos.createdAt).toLocaleString() %></p>
+            <p class="text-lg"><%= new Date(sos.createdAt).toLocaleString({timeZone: 'Asia/Kolkata'}) %></p>
         </div>
         <div class="w-[30vw] mt-[2vh] flex flex-row items-center justify-between">
             <p class="font-bold text-lg">Progress: </p>
@@ -28,7 +28,7 @@
         <% if (sos.progress === "SOS is on its way.") { %>
             <div class="w-[30vw] mt-[2vh] flex flex-row items-center justify-between">
                 <p class="font-bold text-lg">Created At: </p>
-                <p class="text-lg"><%= new Date(new Date(sos.createdAt).getTime() + 240000).toLocaleString() %></p>
+                <p class="text-lg"><%= new Date(new Date(sos.createdAt).getTime() + 200000).toLocaleString({timeZone: 'Asia/Kolkata'}) %></p>
             </div>
         <% } %>
         <form class="mt-[5vh]" action="/sos/delete" method="post">
@@ -38,3 +38,8 @@
         </form>
     <% } %>
 </div>
+<script>
+    setTimeout(() => {
+        window.location.reload()
+    }, 60000)
+</script>
