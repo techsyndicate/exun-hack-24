@@ -16,7 +16,7 @@ router.get('/', async (req,res) => {
             unreadUsers.push(allMessages[i].from)
         }
     }
-    res.render('chat', {title:'welcome', user, receiver:null, allUsers, unreadUsers})
+    res.render('chat', {title:'welcome', user, receiver:null, allUsers, unreadUsers, theUserId: false})
 })
 router.get('/:id', async (req,res) => {
     try {    
